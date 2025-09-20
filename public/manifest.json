@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Fabric AI Product Enhancer",
+  "version": "1.0.0",
+  "description": "Enhances the user experience on the e-commerce platforms.",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": []
+}
