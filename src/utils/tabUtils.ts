@@ -8,7 +8,6 @@ export async function getCurrentTab(): Promise<chrome.tabs.Tab | undefined> {
 
     for (let i = 0; i < strategies.length; i++) {
       const queryOptions = strategies[i];
-      console.log(`TabUtils: Trying strategy ${i + 1}:`, queryOptions);
 
       try {
         const tabs = await chrome.tabs.query(queryOptions);
