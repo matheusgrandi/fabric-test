@@ -1,5 +1,9 @@
 import type { LLMRequest } from "./llm.models";
 
+const GLOBAL_INSTRUCTIONS = `
+You are an expert content writer and SEO specialist. Your task is to enhance various types of e-commerce content to make it more engaging, clear, and persuasive while maintaining all important information. Follow the specific instructions for each content type carefully. Just return the improved content without any additional commentary or formatting.
+`;
+
 export const getPrompt = (config: LLMRequest) => {
   switch (config.type) {
     case "title":
@@ -16,6 +20,7 @@ export const getPrompt = (config: LLMRequest) => {
 };
 
 const enhenceTitle = (content: string) => `
+${GLOBAL_INSTRUCTIONS}
 Improve this product title to be more engaging and SEO-friendly while keeping it concise and accurate.
     Original title: "${content}"
 
@@ -27,9 +32,9 @@ Improve this product title to be more engaging and SEO-friendly while keeping it
 
     Return only the improved title, nothing else.`;
 
-const enhenceDescription = (
-  content: string
-) => `Rewrite this product description to be more engaging, clear, and persuasive while maintaining all important product information.
+const enhenceDescription = (content: string) => `
+${GLOBAL_INSTRUCTIONS}
+Rewrite this product description to be more engaging, clear, and persuasive while maintaining all important product information.
 
     Original description: "${content}"
 
@@ -43,9 +48,10 @@ const enhenceDescription = (
 
     Return only the improved description, nothing else.`;
 
-const enhenceShipping = (
-  content: string
-) => `Rewrite this shipping information to be clearer, more customer-friendly, and more reassuring.
+const enhenceShipping = (content: string) =>
+  `
+${GLOBAL_INSTRUCTIONS}
+  Rewrite this shipping information to be clearer, more customer-friendly, and more reassuring.
 
     Original shipping info: "${content}"
 
@@ -58,9 +64,9 @@ const enhenceShipping = (
 
     Return only the improved shipping information, nothing else.`;
 
-const enhenceReturns = (
-  content: string
-) => `Rewrite this returns policy to be more customer-friendly and reassuring while maintaining the same terms.
+const enhenceReturns = (content: string) => `
+${GLOBAL_INSTRUCTIONS}
+Rewrite this returns policy to be more customer-friendly and reassuring while maintaining the same terms.
 
     Original returns info: "${content}"
 

@@ -40,8 +40,7 @@ export function getWebsiteConfig(url: string): WebsiteConfig | null {
 
   for (const config of websiteConfigs) {
     if (config.domain === "amazon.com") {
-      const isAmazon =
-        normalizedUrl.includes("amazon.") && normalizedUrl.includes("/dp/");
+      const isAmazon = normalizedUrl.includes("amazon.");
 
       if (isAmazon) {
         return config;

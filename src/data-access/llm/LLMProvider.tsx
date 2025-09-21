@@ -101,7 +101,16 @@ export const LLMProvider: React.FC<OwnProps> = ({
 
       const data = await response.json();
 
-      return data.choices.at(0)?.message?.content?.trim() || "";
+      let content = data.choices.at(0)?.message?.content?.trim() || "";
+
+      if (
+        (content.startsWith('"') && content.endsWith('"')) ||
+        (content.startsWith("'") && content.endsWith("'"))
+      ) {
+        content = content.slice(1, -1);
+      }
+
+      return content;
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);

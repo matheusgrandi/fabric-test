@@ -8,7 +8,7 @@ interface PopupHeaderProps {
 const PopupHeader: React.FC<PopupHeaderProps> = ({ onOpenSettings }) => (
   <Flex align="center" justify="between">
     <Flex direction="column" gap="1">
-      <Heading size="4">Fabric AI Enhancer</Heading>
+      <Heading size="4">Fabric Inc AI Enhancer</Heading>
       <Text size="1" color="gray">
         Enhance product content with AI
       </Text>

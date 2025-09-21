@@ -27,7 +27,13 @@ const EnhancerPage = () => {
   };
 
   return (
-    <Flex direction="column" gap="4">
+    <Flex
+      direction={"column"}
+      justify={"between"}
+      width={"100%"}
+      height={"100%"}
+      gap={"4"}
+    >
       <WebsiteStatusCard
         supported={websiteInfo?.supported || false}
         websiteName={websiteInfo?.websiteName || "Unknown"}

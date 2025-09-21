@@ -8,7 +8,7 @@ const PopupLayout: React.FC<PropsWithChildren> = ({ children }) => (
     p="4"
     style={{
       width: "350px",
-      minHeight: "400px",
+      height: "400px",
     }}
   >
     {children}
