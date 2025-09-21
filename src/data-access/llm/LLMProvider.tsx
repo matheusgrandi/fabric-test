@@ -43,51 +43,6 @@ export const LLMProvider: React.FC<OwnProps> = ({
     dispatch({ type: "SET_API_KEY", payload: { apiKey: key } });
   };
 
-  const enhancePageContent: LLMProviderProps["enhancePageContent"] = async (
-    selectedTypes
-  ) => {
-    dispatch({ type: "ENHANCEMENT_INIT" });
-
-    try {
-      const enhancementService = new EnhancementService(generateEnchencement);
-      const result = await enhancementService.enhanceCurrentPage(selectedTypes);
-
-      if (result.success) {
-        dispatch({
-          type: "ENHANCEMENT_SUCCESS",
-          payload: {
-            status: {
-              text: result.message,
-              type: "success",
-            },
-          },
-        });
-      } else {
-        dispatch({
-          type: "ENHANCEMENT_FAILURE",
-          payload: {
-            status: {
-              text: result.message,
-              type: "error",
-            },
-          },
-        });
-      }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
-      dispatch({
-        type: "ENHANCEMENT_FAILURE",
-        payload: {
-          status: {
-            text: `Error: ${errorMessage}`,
-            type: "error",
-          },
-        },
-      });
-    }
-  };
-
   const generateEnchencement: LLMProviderProps["generateEnchencement"] = async (
     config
   ) => {
@@ -135,6 +90,52 @@ export const LLMProvider: React.FC<OwnProps> = ({
         payload: { error: errorMessage },
       });
       throw error;
+    }
+  };
+
+  const enhancementService = new EnhancementService(generateEnchencement);
+
+  const enhancePageContent: LLMProviderProps["enhancePageContent"] = async (
+    selectedTypes
+  ) => {
+    dispatch({ type: "ENHANCEMENT_INIT" });
+
+    try {
+      const result = await enhancementService.enhanceCurrentPage(selectedTypes);
+
+      if (result.success) {
+        dispatch({
+          type: "ENHANCEMENT_SUCCESS",
+          payload: {
+            status: {
+              text: result.message,
+              type: "success",
+            },
+          },
+        });
+      } else {
+        dispatch({
+          type: "ENHANCEMENT_FAILURE",
+          payload: {
+            status: {
+              text: result.message,
+              type: "error",
+            },
+          },
+        });
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      dispatch({
+        type: "ENHANCEMENT_FAILURE",
+        payload: {
+          status: {
+            text: `Error: ${errorMessage}`,
+            type: "error",
+          },
+        },
+      });
     }
   };
 

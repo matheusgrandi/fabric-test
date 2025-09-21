@@ -1,5 +1,5 @@
-import type { LLMConfig } from "./llm.models";
 import type { StatusMessage } from "../../features/enhancer/components/StatusMessage";
+import type { LLMConfig } from "./llm.models";
 
 export interface LLMState {
   config: LLMConfig;
@@ -66,7 +66,7 @@ export function LLMReducer(state: LLMState, action: LLMAction): LLMState {
       return {
         ...state,
         isEnhancing: true,
-        enhancementStatus: { text: "Enhancing content...", type: "info" },
+        enhancementStatus: null,
       };
     case "ENHANCEMENT_SUCCESS":
       return {
