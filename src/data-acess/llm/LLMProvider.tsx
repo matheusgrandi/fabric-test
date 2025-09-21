@@ -1,11 +1,18 @@
-import { createContext, useReducer, type PropsWithChildren } from "react";
-import type { LLMRequest } from "../../providers/llm";
+import {
+  createContext,
+  useContext,
+  useReducer,
+  type PropsWithChildren,
+} from "react";
+import type { LLMRequest } from "./llm.models";
 import { initState, LLMReducer } from "./llm.reducer";
 import { getPrompt } from "./prompts";
 
 interface LLMProviderProps {
   isLoading: boolean;
   error: string | null;
+  currentAPIKey: string;
+  defaultAPIKey: string;
   setAPIKey: (key: string) => void;
   generateEnchencement: (config: LLMRequest) => Promise<string>;
 }
@@ -35,22 +42,25 @@ export const LLMProvider: React.FC<OwnProps> = ({
   ) => {
     dispatch({ type: "LLM_REQUEST_INIT" });
     try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${state.config.apiKey}`,
-        },
-        body: JSON.stringify({
-          max_tokens: state.config.maxTokens,
-          model: state.config.model,
-          temperature: state.config.temperature,
-          messages: [{ role: "user", content: getPrompt(config) }],
-        }),
-      });
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${state.config.apiKey}`,
+          },
+          body: JSON.stringify({
+            max_tokens: state.config.maxTokens,
+            model: state.config.model,
+            temperature: state.config.temperature,
+            messages: [{ role: "user", content: getPrompt(config) }],
+          }),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error("Failed to generate enchencement");
+        throw new Error("Failed to generate enhancement");
       }
       dispatch({ type: "LLM_REQUEST_SUCCESS" });
 
@@ -69,8 +79,23 @@ export const LLMProvider: React.FC<OwnProps> = ({
   };
 
   return (
-    <LLMContext.Provider value={{ ...state, setAPIKey, generateEnchencement }}>
+    <LLMContext.Provider value={{
+      ...state,
+      currentAPIKey: state.config.apiKey,
+      defaultAPIKey,
+      setAPIKey,
+      generateEnchencement
+    }}>
       {children}
     </LLMContext.Provider>
   );
+};
+
+export const useLLM = () => {
+  const context = useContext(LLMContext);
+  if (context === undefined) {
+    throw new Error("useLLM must be used within a LLMProvider");
+  }
+
+  return context;
 };
