@@ -34,7 +34,6 @@ const EnhancerPage = () => {
         isLoading={isLoading}
       />
       <ReadyStatusCard />
-
       {websiteInfo?.supported && (
         <EnhancementOptions
           options={options}
@@ -44,14 +43,12 @@ const EnhancerPage = () => {
           hasSelections={hasSelections}
         />
       )}
-
       <EnhancementButton
         onEnhance={handleEnhance}
         disabled={isDisabled}
         isEnhancing={isEnhancing}
       />
-
-      <StatusMessage message={enhancementMessage} />
+      {enhancementMessage && <StatusMessage message={enhancementMessage} />}
     </Flex>
   );
 };

@@ -16,7 +16,7 @@ interface LLMProviderProps {
   currentAPIKey: string;
   defaultAPIKey: string;
   isEnhancing: boolean;
-  enhancementMessage: string;
+  enhancementMessage: string | null;
   setAPIKey: (key: string) => void;
   generateEnchencement: (config: LLMRequest) => Promise<string>;
   enhancePageContent: (selectedTypes: EnhancementType[]) => Promise<void>;
@@ -56,9 +56,6 @@ export const LLMProvider: React.FC<OwnProps> = ({
           type: "ENHANCEMENT_SUCCESS",
           payload: { message: result.message },
         });
-        setTimeout(() => {
-          dispatch({ type: "CLEAR_ENHANCEMENT_MESSAGE" });
-        }, 5000);
       } else {
         dispatch({
           type: "ENHANCEMENT_FAILURE",
