@@ -10,7 +10,7 @@ import { useWebsiteDetection } from "./hooks/useWebsiteDetection";
 
 const EnhancerPage = () => {
   const { websiteInfo, isLoading } = useWebsiteDetection();
-  const { isEnhancing, enhancePageContent, enhancementMessage } = useLLM();
+  const { isEnhancing, enhancePageContent, enhancementStatus } = useLLM();
   const {
     options,
     selectedTypes,
@@ -54,7 +54,7 @@ const EnhancerPage = () => {
         disabled={isDisabled}
         isEnhancing={isEnhancing}
       />
-      {enhancementMessage && <StatusMessage message={enhancementMessage} />}
+      <StatusMessage status={enhancementStatus} />
     </Flex>
   );
 };

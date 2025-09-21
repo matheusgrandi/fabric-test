@@ -1,21 +1,26 @@
 import { Text } from "@radix-ui/themes";
 
-interface StatusMessageProps {
-  message: string;
+export interface StatusMessage {
+  text: string;
+  type: "success" | "error" | "info";
 }
 
-const StatusMessage: React.FC<StatusMessageProps> = ({ message }) => {
-  if (!message) return null;
+interface StatusMessageProps {
+  status: StatusMessage | null;
+}
 
-  const getColor = (msg: string) => {
-    if (msg.includes("Error")) return "red";
-    if (msg.includes("✅")) return "green";
-    return "gray";
-  };
+const StatusMessage = ({ status }: StatusMessageProps) => {
+  if (!status) {
+    return null;
+  }
 
   return (
-    <Text size="2" color={getColor(message)} align="center">
-      {message}
+    <Text
+      size="2"
+      color={status.type === "success" ? "green" : "red"}
+      align="center"
+    >
+      {status.text}
     </Text>
   );
 };

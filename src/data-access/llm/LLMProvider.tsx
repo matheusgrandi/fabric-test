@@ -4,6 +4,7 @@ import {
   useReducer,
   type PropsWithChildren,
 } from "react";
+import type { StatusMessage } from "../../features/enhancer/components/StatusMessage";
 import type { EnhancementType } from "../../features/enhancer/hooks/useEnhancementOptions";
 import { EnhancementService } from "../../services/enhancementService";
 import type { LLMRequest } from "./llm.models";
@@ -16,7 +17,7 @@ interface LLMProviderProps {
   currentAPIKey: string;
   defaultAPIKey: string;
   isEnhancing: boolean;
-  enhancementMessage: string | null;
+  enhancementStatus: StatusMessage | null;
   setAPIKey: (key: string) => void;
   generateEnchencement: (config: LLMRequest) => Promise<string>;
   enhancePageContent: (selectedTypes: EnhancementType[]) => Promise<void>;
@@ -54,12 +55,22 @@ export const LLMProvider: React.FC<OwnProps> = ({
       if (result.success) {
         dispatch({
           type: "ENHANCEMENT_SUCCESS",
-          payload: { message: result.message },
+          payload: {
+            status: {
+              text: result.message,
+              type: "success",
+            },
+          },
         });
       } else {
         dispatch({
           type: "ENHANCEMENT_FAILURE",
-          payload: { message: result.message },
+          payload: {
+            status: {
+              text: result.message,
+              type: "error",
+            },
+          },
         });
       }
     } catch (error) {
@@ -67,7 +78,12 @@ export const LLMProvider: React.FC<OwnProps> = ({
         error instanceof Error ? error.message : "Unknown error";
       dispatch({
         type: "ENHANCEMENT_FAILURE",
-        payload: { message: `Error: ${errorMessage}` },
+        payload: {
+          status: {
+            text: `Error: ${errorMessage}`,
+            type: "error",
+          },
+        },
       });
     }
   };

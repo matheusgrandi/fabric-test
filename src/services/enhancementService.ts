@@ -64,7 +64,7 @@ export class EnhancementService {
         enhancedCount === 1 ? "content type" : "content types";
       return {
         success: true,
-        message: `✅ Successfully enhanced ${enhancedCount} ${contentText}!`,
+        message: `✅ Successfully enhanced ${contentText}!`,
       };
     } catch (error) {
       console.error("Enhancement error:", error);

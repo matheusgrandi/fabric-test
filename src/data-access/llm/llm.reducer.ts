@@ -1,11 +1,12 @@
 import type { LLMConfig } from "./llm.models";
+import type { StatusMessage } from "../../features/enhancer/components/StatusMessage";
 
 export interface LLMState {
   config: LLMConfig;
   isLoading: boolean;
   error: string | null;
   isEnhancing: boolean;
-  enhancementMessage: string | null;
+  enhancementStatus: StatusMessage | null;
 }
 
 export const initState: LLMState = {
@@ -18,7 +19,7 @@ export const initState: LLMState = {
   isLoading: false,
   error: null,
   isEnhancing: false,
-  enhancementMessage: "",
+  enhancementStatus: null,
 };
 
 export type LLMAction =
@@ -28,8 +29,8 @@ export type LLMAction =
   | { type: "LLM_REQUEST_SUCCESS" }
   | { type: "LLM_REQUEST_FAILURE"; payload: { error: string } }
   | { type: "ENHANCEMENT_INIT" }
-  | { type: "ENHANCEMENT_SUCCESS"; payload: { message: string } }
-  | { type: "ENHANCEMENT_FAILURE"; payload: { message: string } };
+  | { type: "ENHANCEMENT_SUCCESS"; payload: { status: StatusMessage } }
+  | { type: "ENHANCEMENT_FAILURE"; payload: { status: StatusMessage } };
 
 export function LLMReducer(state: LLMState, action: LLMAction): LLMState {
   switch (action.type) {
@@ -65,19 +66,19 @@ export function LLMReducer(state: LLMState, action: LLMAction): LLMState {
       return {
         ...state,
         isEnhancing: true,
-        enhancementMessage: null,
+        enhancementStatus: { text: "Enhancing content...", type: "info" },
       };
     case "ENHANCEMENT_SUCCESS":
       return {
         ...state,
         isEnhancing: false,
-        enhancementMessage: action.payload.message,
+        enhancementStatus: action.payload.status,
       };
     case "ENHANCEMENT_FAILURE":
       return {
         ...state,
         isEnhancing: false,
-        enhancementMessage: action.payload.message,
+        enhancementStatus: action.payload.status,
       };
     default:
       return state;
