@@ -170,7 +170,7 @@ export class EnhancementService {
           if (!existingIndicator) {
             const indicator = document.createElement("div");
             indicator.className = `fabric-ai-indicator ${indicatorClass}`;
-            indicator.textContent = `Enhanced with Fabric AI ✨ (${type})`;
+            indicator.textContent = `Enhanced with Fabric AI ✨`;
             indicator.style.cssText = `
               font-size: 11px;
               color: #666;
