@@ -4,6 +4,8 @@ export interface LLMState {
   config: LLMConfig;
   isLoading: boolean;
   error: string | null;
+  isEnhancing: boolean;
+  enhancementMessage: string;
 }
 
 export const initState: LLMState = {
@@ -15,6 +17,8 @@ export const initState: LLMState = {
   },
   isLoading: false,
   error: null,
+  isEnhancing: false,
+  enhancementMessage: "",
 };
 
 export type LLMAction =
@@ -22,7 +26,11 @@ export type LLMAction =
   | { type: "SET_API_KEY"; payload: { apiKey: string } }
   | { type: "LLM_REQUEST_INIT" }
   | { type: "LLM_REQUEST_SUCCESS" }
-  | { type: "LLM_REQUEST_FAILURE"; payload: { error: string } };
+  | { type: "LLM_REQUEST_FAILURE"; payload: { error: string } }
+  | { type: "ENHANCEMENT_INIT" }
+  | { type: "ENHANCEMENT_SUCCESS"; payload: { message: string } }
+  | { type: "ENHANCEMENT_FAILURE"; payload: { message: string } }
+  | { type: "CLEAR_ENHANCEMENT_MESSAGE" };
 
 export function LLMReducer(state: LLMState, action: LLMAction): LLMState {
   switch (action.type) {
@@ -53,6 +61,29 @@ export function LLMReducer(state: LLMState, action: LLMAction): LLMState {
         ...state,
         isLoading: false,
         error: action.payload.error,
+      };
+    case "ENHANCEMENT_INIT":
+      return {
+        ...state,
+        isEnhancing: true,
+        enhancementMessage: "Enhancing content...",
+      };
+    case "ENHANCEMENT_SUCCESS":
+      return {
+        ...state,
+        isEnhancing: false,
+        enhancementMessage: action.payload.message,
+      };
+    case "ENHANCEMENT_FAILURE":
+      return {
+        ...state,
+        isEnhancing: false,
+        enhancementMessage: action.payload.message,
+      };
+    case "CLEAR_ENHANCEMENT_MESSAGE":
+      return {
+        ...state,
+        enhancementMessage: "",
       };
     default:
       return state;

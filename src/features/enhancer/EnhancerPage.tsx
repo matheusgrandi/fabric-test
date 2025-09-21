@@ -1,23 +1,29 @@
 import { Flex } from "@radix-ui/themes";
+import { useLLM } from "../../data-access/llm/LLMProvider";
 import EnhancementButton from "./components/EnhancementButton";
 import EnhancementOptions from "./components/EnhancementOptions";
 import ReadyStatusCard from "./components/ReadyStatusCard";
 import StatusMessage from "./components/StatusMessage";
 import WebsiteStatusCard from "./components/WebsiteStatusCard";
-import { useEnhancement } from "./hooks/useEnhancement";
 import { useEnhancementOptions } from "./hooks/useEnhancementOptions";
 import { useWebsiteDetection } from "./hooks/useWebsiteDetection";
 
 const EnhancerPage = () => {
   const { websiteInfo, isLoading } = useWebsiteDetection();
-  const { isEnhancing, message, enhanceContent } = useEnhancement();
-  const { options, toggleOption, selectAll, deselectAll, hasSelections } =
-    useEnhancementOptions(websiteInfo?.url);
+  const { isEnhancing, enhancePageContent, enhancementMessage } = useLLM();
+  const {
+    options,
+    selectedTypes,
+    toggleOption,
+    selectAll,
+    deselectAll,
+    hasSelections,
+  } = useEnhancementOptions(websiteInfo?.url);
 
   const isDisabled = !websiteInfo?.supported || isEnhancing || !hasSelections;
 
   const handleEnhance = () => {
-    enhanceContent();
+    enhancePageContent(selectedTypes);
   };
 
   return (
@@ -45,7 +51,7 @@ const EnhancerPage = () => {
         isEnhancing={isEnhancing}
       />
 
-      <StatusMessage message={message} />
+      <StatusMessage message={enhancementMessage} />
     </Flex>
   );
 };
